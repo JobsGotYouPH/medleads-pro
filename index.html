@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedLeads Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Epilogue:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07090e;--surf:#0f1521;--s2:#161f32;--s3:#1c2840;--b1:rgba(255,255,255,.06);--b2:rgba(255,255,255,.12);--tx:#e8edf8;--mu:#5d6e8a;--bl:#3b82f6;--cy:#06b6d4;--gn:#22c55e;--am:#f59e0b;--rd:#ef4444;--pu:#a78bfa;--pk:#f472b6;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Epilogue',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;}
+header{background:rgba(15,21,33,.98);border-bottom:1px solid var(--b2);padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;display:flex;align-items:center;gap:9px;}
+.lm{width:30px;height:30px;background:linear-gradient(135deg,var(--bl),var(--cy));border-radius:7px;display:flex;align-items:center;justify-content:center;}
+.pills{display:flex;gap:7px;}
+.pill{padding:3px 11px;border-radius:20px;font-size:.7rem;font-weight:600;background:var(--s2);border:1px solid var(--b2);color:var(--cy);}
+.pill.g{color:var(--gn);}
+.pill.live{color:var(--gn);border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.07);display:flex;align-items:center;gap:5px;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--gn);animation:blink 1.4s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+.tabs{background:var(--surf);border-bottom:1px solid var(--b2);padding:0 28px;display:flex;}
+.tab{font-family:'Epilogue',sans-serif;font-size:.82rem;font-weight:600;padding:13px 17px;background:none;border:none;color:var(--mu);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;}
+.tab:hover{color:var(--tx);}.tab.on{color:var(--bl);border-bottom-color:var(--bl);}
+.pane{display:none;}.pane.on{display:block;}
+.hero{padding:30px 28px 20px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-50px;left:50%;transform:translateX(-50%);width:600px;height:280px;background:radial-gradient(ellipse,rgba(59,130,246,.1) 0%,transparent 68%);pointer-events:none;}
+.ey{display:inline-flex;background:rgba(34,197,94,.09);border:1px solid rgba(34,197,94,.22);color:var(--gn);padding:3px 12px;border-radius:20px;font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.4rem,3vw,2.4rem);font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:8px;}
+.grd{background:linear-gradient(135deg,var(--bl),var(--cy));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero p{color:var(--mu);font-size:.84rem;max-width:520px;margin:0 auto 14px;line-height:1.6;}
+.hst{display:flex;justify-content:center;gap:22px;flex-wrap:wrap;}
+.hn{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,var(--bl),var(--cy));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hl{font-size:.6rem;color:var(--mu);text-transform:uppercase;letter-spacing:.8px;margin-top:1px;}
+.wrap{max-width:1340px;margin:0 auto;padding:16px 16px 80px;}
+.infobanner{background:rgba(6,182,212,.07);border:1px solid rgba(6,182,212,.2);border-radius:11px;padding:12px 16px;margin-bottom:14px;font-size:.78rem;color:var(--cy);line-height:1.6;}
+.infobanner b{color:var(--tx);}
+.card{background:var(--surf);border:1px solid var(--b2);border-radius:14px;padding:20px 22px;margin-bottom:14px;}
+.ct{font-family:'Syne',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--mu);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.ct::before{content:'';width:3px;height:11px;background:var(--bl);border-radius:2px;display:inline-block;}
+.frows{display:flex;flex-direction:column;gap:9px;}
+.fr{display:grid;gap:9px;align-items:end;}
+.fr1{grid-template-columns:2fr 1.1fr 1fr 1fr 1fr 1fr;}
+.fr2{grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr;}
+.fr3{grid-template-columns:2fr 1fr 1fr auto auto;}
+.gf{display:flex;flex-direction:column;gap:3px;}
+.gf label{font-size:.59rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--mu);}
+.gf select,.gf input{padding:8px 10px;background:var(--s2);border:1px solid var(--b2);border-radius:7px;color:var(--tx);font-family:'Epilogue',sans-serif;font-size:.81rem;outline:none;transition:border-color .2s;cursor:pointer;width:100%;}
+.gf select:focus,.gf input:focus{border-color:var(--bl);}
+.gf select option{background:#0f1521;}
+/* PROGRESS */
+.prog{display:none;background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.2);border-radius:10px;padding:12px 15px;margin-bottom:12px;}
+.pt{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.pl{font-size:.75rem;color:var(--bl);font-weight:600;}
+.pc{font-size:.7rem;color:var(--rd);cursor:pointer;background:none;border:none;font-family:'Epilogue',sans-serif;padding:2px 8px;border-radius:4px;}
+.pc:hover{background:rgba(239,68,68,.1);}
+.pb{height:5px;background:var(--s3);border-radius:3px;overflow:hidden;}
+.pf{height:100%;background:linear-gradient(90deg,var(--bl),var(--cy));border-radius:3px;transition:width .3s;width:0;}
+.ps{display:flex;gap:14px;margin-top:7px;flex-wrap:wrap;}
+.pst{font-size:.68rem;color:var(--mu);}
+.pst b{color:var(--tx);font-weight:600;}
+/* QUICK PICKS */
+.qrow{display:flex;gap:5px;flex-wrap:wrap;margin-top:11px;padding-top:10px;border-top:1px solid var(--b1);}
+.ql{font-size:.61rem;color:var(--mu);align-self:center;margin-right:2px;}
+.qb{padding:3px 10px;border-radius:20px;font-size:.67rem;font-weight:600;cursor:pointer;border:1px solid var(--b2);background:var(--s2);color:var(--tx);transition:all .15s;white-space:nowrap;position:relative;}
+.qb:hover{border-color:var(--bl);color:var(--bl);}
+.qb.on{background:var(--bl);border-color:var(--bl);color:#fff;}
+.qb.done{border-color:rgba(34,197,94,.5);color:var(--gn);}
+.qb.done::after{content:'✓';margin-left:4px;font-size:.6rem;}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border-radius:7px;font-family:'Epilogue',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;border:none;transition:all .2s;white-space:nowrap;}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important;box-shadow:none!important;}
+.b-gen{background:linear-gradient(135deg,var(--bl),var(--cy));color:#fff;box-shadow:0 3px 14px rgba(59,130,246,.26);}
+.b-gen:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 20px rgba(59,130,246,.4);}
+.b-gr{background:var(--gn);color:#000;font-weight:700;}
+.b-gr:hover:not(:disabled){background:#16a34a;}
+.b-gh{background:var(--s2);border:1px solid var(--b2);color:var(--tx);}
+.b-gh:hover:not(:disabled){border-color:var(--bl);color:var(--bl);}
+.b-rd{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--rd);}
+.b-rd:hover:not(:disabled){background:var(--rd);color:#fff;}
+.b-sm{padding:5px 11px;font-size:.72rem;}
+.b-xs{padding:3px 7px;font-size:.67rem;}
+/* TOOLBAR */
+.tlbar{display:none;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.tll{display:flex;gap:7px;align-items:center;flex:1;}
+.tlr{display:flex;gap:6px;flex-wrap:wrap;}
+.sw{position:relative;flex:1;max-width:240px;}
+.sw input{width:100%;padding:7px 11px 7px 28px;background:var(--surf);border:1px solid var(--b2);border-radius:7px;color:var(--tx);font-family:'Epilogue',sans-serif;font-size:.8rem;outline:none;transition:border-color .2s;}
+.sw input:focus{border-color:var(--bl);}
+.swi{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--mu);font-size:.74rem;pointer-events:none;}
+.rc{font-size:.71rem;color:var(--mu);}
+/* SEL BAR */
+.selbar{display:none;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.22);border-radius:9px;padding:9px 14px;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px;flex-wrap:wrap;}
+.sbl{font-size:.8rem;color:var(--bl);font-weight:600;}
+.sbr{display:flex;gap:6px;flex-wrap:wrap;}
+/* TABLE */
+.tblw{background:var(--surf);border:1px solid var(--b1);border-radius:13px;overflow:hidden;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.77rem;min-width:860px;}
+thead{background:var(--s2);border-bottom:1px solid var(--b2);}
+th{padding:9px 10px;text-align:left;font-family:'Syne',sans-serif;font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--mu);white-space:nowrap;}
+td{padding:9px 10px;border-bottom:1px solid var(--b1);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tbody tr{transition:background .12s;animation:ri .18s ease forwards;opacity:0;}
+@keyframes ri{to{opacity:1;}}
+tbody tr:hover{background:rgba(255,255,255,.014);}
+.pname{font-weight:600;font-size:.8rem;line-height:1.3;}
+.porg{font-size:.66rem;color:var(--cy);margin-top:2px;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.npi{font-family:'Courier New',monospace;font-size:.61rem;color:var(--mu);margin-top:1px;}
+.stag{display:inline-block;padding:2px 6px;border-radius:4px;font-size:.61rem;font-weight:600;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis;}
+.sf{background:rgba(59,130,246,.1);color:var(--bl);}
+.sm{background:rgba(167,139,250,.1);color:var(--pu);}
+.sd{background:rgba(245,158,11,.1);color:var(--am);}
+.sc{background:rgba(239,68,68,.1);color:var(--rd);}
+.sn{background:rgba(6,182,212,.1);color:var(--cy);}
+.su{background:rgba(244,114,182,.1);color:var(--pk);}
+.so{background:rgba(255,255,255,.05);color:var(--mu);}
+.adr{font-size:.69rem;color:var(--mu);line-height:1.5;}
+.phn{font-size:.69rem;color:var(--mu);white-space:nowrap;}
+.esel{background:var(--s2);border:1px solid var(--b2);border-radius:5px;color:#60a5fa;font-family:'Epilogue',sans-serif;font-size:.68rem;padding:3px 6px;outline:none;cursor:pointer;width:215px;}
+.esel:focus{border-color:var(--bl);}
+.lia{display:inline-flex;align-items:center;gap:3px;background:rgba(59,130,246,.09);border:1px solid rgba(59,130,246,.2);color:var(--bl);padding:2px 7px;border-radius:4px;font-size:.64rem;font-weight:600;text-decoration:none;transition:all .15s;}
+.lia:hover{background:var(--bl);color:#fff;}
+input[type=checkbox]{width:13px;height:13px;accent-color:var(--bl);cursor:pointer;}
+.pag{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:12px;flex-wrap:wrap;}
+.pgb{background:var(--surf);border:1px solid var(--b2);color:var(--tx);padding:4px 10px;border-radius:5px;font-family:'Epilogue',sans-serif;font-size:.72rem;cursor:pointer;transition:all .12s;}
+.pgb:hover:not(:disabled){border-color:var(--bl);color:var(--bl);}
+.pgb.on{background:var(--bl);border-color:var(--bl);color:#fff;}
+.pgb:disabled{opacity:.3;cursor:not-allowed;}
+.empty{text-align:center;padding:46px 22px;}
+.ei{font-size:2rem;opacity:.2;margin-bottom:10px;}
+.et{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;opacity:.28;margin-bottom:4px;}
+.es2{font-size:.74rem;color:var(--mu);max-width:400px;margin:0 auto;line-height:1.6;}
+.errbox{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.25);border-radius:9px;padding:11px 14px;margin-bottom:11px;font-size:.78rem;color:var(--rd);display:none;line-height:1.5;}
+/* WARN BANNER */
+.warnbanner{display:none;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);border-radius:9px;padding:10px 14px;margin-bottom:11px;font-size:.78rem;color:var(--am);line-height:1.5;}
+/* HISTORY TAB */
+.hist-empty{text-align:center;padding:60px 22px;color:var(--mu);font-size:.82rem;}
+.hist-ei{font-size:2.5rem;opacity:.15;margin-bottom:12px;}
+.hist-grid{display:flex;flex-direction:column;gap:10px;}
+.hcard{background:var(--surf);border:1px solid var(--b2);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.hcard-icon{font-size:1.4rem;flex-shrink:0;}
+.hcard-info{flex:1;min-width:140px;}
+.hcard-title{font-weight:600;font-size:.84rem;margin-bottom:3px;}
+.hcard-meta{font-size:.71rem;color:var(--mu);display:flex;gap:12px;flex-wrap:wrap;}
+.hcard-meta span b{color:var(--tx);}
+.hcard-badges{display:flex;gap:6px;flex-wrap:wrap;}
+.hbadge{padding:2px 8px;border-radius:12px;font-size:.66rem;font-weight:600;}
+.hb-spec{background:rgba(59,130,246,.1);color:var(--bl);}
+.hb-state{background:rgba(6,182,212,.1);color:var(--cy);}
+.hb-count{background:rgba(34,197,94,.1);color:var(--gn);}
+.hb-src{background:rgba(167,139,250,.1);color:var(--pu);}
+.hcard-right{display:flex;gap:7px;align-items:center;}
+.hcard-date{font-size:.67rem;color:var(--mu);text-align:right;}
+.hist-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+.hstat{background:var(--surf);border:1px solid var(--b2);border-radius:11px;padding:14px 16px;text-align:center;}
+.hstat-n{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,var(--bl),var(--cy));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hstat-l{font-size:.62rem;color:var(--mu);text-transform:uppercase;letter-spacing:.7px;margin-top:2px;}
+/* MAPS TAB */
+.mlay{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;}
+.minstr{background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.2);border-radius:13px;padding:16px;}
+.mit{font-family:'Syne',sans-serif;font-size:.87rem;font-weight:700;color:var(--bl);margin-bottom:11px;}
+.msr{display:flex;gap:10px;margin-bottom:9px;align-items:flex-start;}
+.msn{width:20px;height:20px;border-radius:50%;background:var(--bl);color:#fff;font-size:.67rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.mst{font-size:.76rem;color:rgba(232,237,248,.6);line-height:1.55;}
+.mst strong{color:var(--tx);}
+.mst code{background:var(--s2);border:1px solid var(--b2);padding:1px 4px;border-radius:3px;font-size:.69rem;color:var(--cy);}
+.ta{background:var(--s2);border:1px solid var(--b2);border-radius:9px;padding:12px;width:100%;min-height:190px;font-family:'Epilogue',sans-serif;font-size:.78rem;color:var(--tx);outline:none;resize:vertical;line-height:1.6;transition:border-color .2s;}
+.ta:focus{border-color:var(--bl);}
+.ta::placeholder{color:var(--mu);}
+.ctb{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap;align-items:center;}
+.ccnt{font-size:.69rem;color:var(--mu);flex:1;}
+.clcard{background:var(--surf);border:1px solid var(--b2);border-radius:11px;overflow:hidden;}
+.clh{background:var(--s2);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--b2);}
+.clt{font-family:'Syne',sans-serif;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mu);}
+.cla{display:flex;gap:5px;}
+.lcard{padding:12px 14px;border-bottom:1px solid var(--b1);display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;animation:ri .18s ease forwards;opacity:0;}
+.lcard:last-child{border-bottom:none;}
+.lcard:hover{background:rgba(255,255,255,.01);}
+.lcn{font-weight:600;font-size:.8rem;margin-bottom:2px;}
+.lco{font-size:.66rem;color:var(--cy);margin-bottom:3px;}
+.lcm{display:flex;gap:9px;flex-wrap:wrap;}
+.lcm span{font-size:.67rem;color:var(--mu);}
+.lcm a{color:var(--cy);text-decoration:none;}
+.mempty{text-align:center;padding:32px 16px;color:var(--mu);font-size:.77rem;}
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--s2);border:1px solid var(--b2);border-left:3px solid var(--gn);color:var(--tx);padding:10px 16px;border-radius:9px;font-size:.8rem;opacity:0;transform:translateY(10px);transition:all .22s;z-index:999;pointer-events:none;max-width:310px;}
+.toast.on{opacity:1;transform:translateY(0);}
+.toast.w{border-left-color:var(--am);}
+.toast.e{border-left-color:var(--rd);}
+@media(max-width:1080px){.fr1,.fr2{grid-template-columns:1fr 1fr 1fr;}.fr3{grid-template-columns:1fr 1fr auto auto;}.mlay{grid-template-columns:1fr;}.hist-stats{grid-template-columns:1fr 1fr;}}
+@media(max-width:620px){.fr1,.fr2,.fr3{grid-template-columns:1fr 1fr;}header{padding:0 12px;}.hero{padding:20px 12px 14px;}.wrap{padding:12px 9px 60px;}.hist-stats{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><div class="lm">⚕</div>MedLeads <span style="color:var(--cy)">Pro</span></div>
+  <div class="pills">
+    <span class="pill live"><span class="dot"></span>Live NLM Data</span>
+    <span class="pill" id="hpT">0 Leads</span>
+    <span class="pill g" id="hpS">0 Selected</span>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab on"  onclick="swTab('gen',this)">⚡ NPI Generator</button>
+  <button class="tab"     onclick="swTab('hist',this)" id="histTab">📋 Download History <span id="histBadge" style="display:none;background:var(--gn);color:#000;border-radius:10px;padding:1px 6px;font-size:.62rem;margin-left:4px;font-weight:700;"></span></button>
+  <button class="tab"     onclick="swTab('maps',this)">🗺️ Maps Cleaner</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     NPI GENERATOR
+══════════════════════════════════════════ -->
+<div class="pane on" id="pane-gen">
+<div class="hero">
+  <div class="ey">✅ NLM npi_idv + npi_org · A–Z Multi-Term Sweep · Up to 50K Leads</div>
+  <h1>Real Healthcare Providers<br><span class="grd">Maximum Leads Every Time</span></h1>
+  <p>Uses <b style="color:var(--tx)">A–Z sweep strategy</b> — searches "Specialty A", "Specialty B" … "Specialty Z" across both individual and org APIs, deduplicates by NPI, giving you the absolute maximum real leads possible.</p>
+  <div class="hst">
+    <div><div class="hn">50K</div><div class="hl">Max Per Pull</div></div>
+    <div><div class="hn">A–Z</div><div class="hl">Sweep Strategy</div></div>
+    <div><div class="hn">2 APIs</div><div class="hl">idv + org</div></div>
+    <div><div class="hn">Free</div><div class="hl">No Key</div></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div style="background:var(--s2);border:1px solid var(--b2);border-radius:13px;overflow:hidden;margin-bottom:14px;">
+    <div style="background:rgba(6,182,212,.09);border-bottom:1px solid rgba(6,182,212,.18);padding:11px 16px;display:flex;align-items:center;gap:8px;">
+      <span>📊</span>
+      <span style="font-family:'Syne',sans-serif;font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--cy);">Why You Get 200–900 Leads Instead of 5,000 — And How We Fix It</span>
+    </div>
+    <div style="padding:14px 16px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div>
+        <div style="font-size:.71rem;font-weight:700;color:var(--rd);margin-bottom:7px;">❌ The Real Problem</div>
+        <div style="font-size:.72rem;color:rgba(232,237,248,.58);line-height:1.75;">
+          The NLM government API is the <b style="color:var(--tx)">only free browser-compatible healthcare API</b> — it hard-caps at <b style="color:var(--tx)">7,500 records per search term</b> and 500 per page. After applying state, phone, and zip filters you often get only 200–900 results matching your exact criteria.<br><br>
+          The official NPPES registry (npiregistry.cms.hhs.gov) has <b style="color:var(--tx)">8+ million providers</b> but <b style="color:var(--rd)">blocks all browser requests (CORS)</b> — it requires a paid server backend. No free workaround exists for it in a browser.
+        </div>
+      </div>
+      <div>
+        <div style="font-size:.71rem;font-weight:700;color:var(--gn);margin-bottom:7px;">✅ Our Fix — A–Z Alphabet Sweep</div>
+        <div style="font-size:.72rem;color:rgba(232,237,248,.58);line-height:1.75;">
+          We run <b style="color:var(--tx)">26 automatic searches</b>: <em>"Family Medicine A"</em>, <em>"Family Medicine B"</em> … <em>"Family Medicine Z"</em>. Each letter returns a different slice of providers. We run both the <b style="color:var(--cy)">Individuals API</b> and <b style="color:var(--cy)">Organizations API</b> and deduplicate everything by NPI.<br><br>
+          <b style="color:var(--gn)">26 letters × 2 APIs × 7,500 = up to 390,000 potential records.</b> For popular specialties like Family Med, Dentist, or Psychiatry you will consistently pull <b style="color:var(--gn)">5,000–25,000+ unique providers</b>.
+        </div>
+      </div>
+    </div>
+    <div style="background:rgba(34,197,94,.05);border-top:1px solid rgba(34,197,94,.1);padding:10px 16px;display:flex;gap:18px;flex-wrap:wrap;align-items:center;">
+      <span style="font-size:.69rem;color:var(--gn);">⚡ Use <b>A–Z Sweep</b> mode</span>
+      <span style="font-size:.69rem;color:var(--cy);">🔀 Set Source to <b>Both (idv + org)</b></span>
+      <span style="font-size:.69rem;color:var(--am);">🗺️ Try <b>All States</b> for national pulls</span>
+      <span style="font-size:.69rem;color:var(--pu);">📋 <b>History tab</b> shows what you already downloaded</span>
+    </div>
+  </div>
+
+  <div class="warnbanner" id="warnbanner"></div>
+  <div class="errbox" id="errbox"></div>
+
+  <div class="card">
+    <div class="ct">Search Filters</div>
+    <div class="frows">
+
+      <div class="fr fr1">
+        <div class="gf">
+          <label>Specialty</label>
+          <select id="fSpec">
+            <option value="Family Medicine">Family Medicine</option>
+            <option value="Internal Medicine">Internal Medicine</option>
+            <option value="General Practice">General Practice</option>
+            <option value="Psychiatry">Psychiatry</option>
+            <option value="Psychologist">Psychology / Psychologist</option>
+            <option value="Mental Health Counselor">Mental Health Counselor</option>
+            <option value="Clinical Social Worker">Clinical Social Worker (LCSW)</option>
+            <option value="Marriage Family Therapist">Marriage &amp; Family Therapist</option>
+            <option value="Addiction Medicine">Addiction Medicine</option>
+            <option value="Behavioral Health">Behavioral Health</option>
+            <option value="Dentist">Dentist</option>
+            <option value="Orthodontist">Orthodontist</option>
+            <option value="Oral Surgeon">Oral Surgeon</option>
+            <option value="Pediatric Dentist">Pediatric Dentist</option>
+            <option value="Chiropractor">Chiropractor</option>
+            <option value="Nurse Practitioner">Nurse Practitioner</option>
+            <option value="Physician Assistant">Physician Assistant</option>
+            <option value="Obstetrics Gynecology">OB/GYN</option>
+            <option value="Pediatrics">Pediatrics</option>
+            <option value="Physical Therapist">Physical Therapist</option>
+            <option value="Urgent Care">Urgent Care</option>
+            <option value="Optometrist">Optometrist</option>
+            <option value="Dermatologist">Dermatologist</option>
+            <option value="Cardiologist">Cardiologist</option>
+            <option value="Orthopedic Surgery">Orthopedic Surgery</option>
+            <option value="Neurologist">Neurologist</option>
+            <option value="Gastroenterologist">Gastroenterologist</option>
+            <option value="Oncologist">Oncologist</option>
+            <option value="Endocrinologist">Endocrinologist</option>
+            <option value="Urologist">Urologist</option>
+            <option value="Pulmonologist">Pulmonologist</option>
+            <option value="Rheumatologist">Rheumatologist</option>
+            <option value="Nephrologist">Nephrologist</option>
+            <option value="Allergy Immunology">Allergy &amp; Immunology</option>
+            <option value="Podiatrist">Podiatrist</option>
+            <option value="Occupational Therapist">Occupational Therapist</option>
+            <option value="Speech Language Pathologist">Speech Language Pathologist</option>
+            <option value="Acupuncturist">Acupuncturist</option>
+            <option value="Naturopathic">Naturopathic Medicine</option>
+            <option value="Pain Management">Pain Management</option>
+            <option value="Sports Medicine">Sports Medicine</option>
+            <option value="Sleep Medicine">Sleep Medicine</option>
+            <option value="Geriatrics">Geriatric Medicine</option>
+            <option value="Hospice Palliative">Hospice &amp; Palliative</option>
+            <option value="Wound Care">Wound Care</option>
+            <option value="Radiologist">Radiologist</option>
+            <option value="Anesthesiologist">Anesthesiologist</option>
+            <option value="Emergency Medicine">Emergency Medicine</option>
+            <option value="Plastic Surgeon">Plastic Surgeon</option>
+          </select>
+        </div>
+        <div class="gf">
+          <label>State</label>
+          <select id="fState">
+            <option value="">All States</option>
+            <option>AL</option><option>AK</option><option>AZ</option><option>AR</option>
+            <option>CA</option><option>CO</option><option>CT</option><option>DE</option>
+            <option>FL</option><option>GA</option><option>HI</option><option>ID</option>
+            <option>IL</option><option>IN</option><option>IA</option><option>KS</option>
+            <option>KY</option><option>LA</option><option>ME</option><option>MD</option>
+            <option>MA</option><option>MI</option><option>MN</option><option>MS</option>
+            <option>MO</option><option>MT</option><option>NE</option><option>NV</option>
+            <option>NH</option><option>NJ</option><option>NM</option><option>NY</option>
+            <option>NC</option><option>ND</option><option>OH</option><option>OK</option>
+            <option>OR</option><option>PA</option><option>RI</option><option>SC</option>
+            <option>SD</option><option>TN</option><option>TX</option><option>UT</option>
+            <option>VT</option><option>VA</option><option>WA</option><option>WV</option>
+            <option>WI</option><option>WY</option>
+          </select>
+        </div>
+        <div class="gf"><label>City (optional)</label><input type="text" id="fCity" placeholder="e.g. Houston"></div>
+        <div class="gf">
+          <label>Source API</label>
+          <select id="fSrc">
+            <option value="both">Both (idv + org) — most leads</option>
+            <option value="idv">Individuals only</option>
+            <option value="org">Organizations only</option>
+          </select>
+        </div>
+        <div class="gf">
+          <label>Email Pattern</label>
+          <select id="fEP">
+            <option value="0">first.last@domain.com</option>
+            <option value="1">dr.last@domain.com</option>
+            <option value="2">flast@domain.com</option>
+            <option value="3">info@domain.com</option>
+          </select>
+        </div>
+        <div class="gf">
+          <label>Has Phone #</label>
+          <select id="fPh"><option value="">All</option><option value="yes">Only with phone</option></select>
+        </div>
+      </div>
+
+      <div class="fr fr2">
+        <div class="gf">
+          <label>Sweep Mode</label>
+          <select id="fSweep">
+            <option value="az">A–Z Sweep (max leads)</option>
+            <option value="single">Single search only</option>
+          </select>
+        </div>
+        <div class="gf">
+          <label>Sort By</label>
+          <select id="fSort"><option value="">Default</option><option value="name">Name A→Z</option><option value="state">State A→Z</option><option value="city">City A→Z</option></select>
+        </div>
+        <div class="gf">
+          <label>Deduplicate (NPI)</label>
+          <select id="fDd"><option value="yes">Yes — remove dupes</option><option value="no">No</option></select>
+        </div>
+        <div class="gf"><label>Zip (optional)</label><input type="text" id="fZip" placeholder="e.g. 77001" maxlength="5"></div>
+        <div class="gf">
+          <label>Append to list</label>
+          <select id="fApp"><option value="no">No — replace</option><option value="yes">Yes — add to list</option></select>
+        </div>
+        <div class="gf"></div>
+      </div>
+
+      <div class="fr fr3">
+        <div class="gf">
+          <label>How Many Leads (max 50,000)</label>
+          <input type="number" id="fCnt" value="2000" min="1" max="50000">
+        </div>
+        <div class="gf"></div>
+        <div class="gf"></div>
+        <div class="gf"><button class="btn b-gen" id="genBtn" onclick="go()">⚡ Pull Leads</button></div>
+        <div class="gf"><button class="btn b-gh" onclick="clearAll()">✕ Clear</button></div>
+      </div>
+
+    </div>
+
+    <div class="qrow">
+      <span class="ql">Quick:</span>
+      <button class="qb" data-spec="Family Medicine"          onclick="qp(this)">👨‍⚕️ Family Med</button>
+      <button class="qb" data-spec="Psychiatry"               onclick="qp(this)">🧠 Psychiatry</button>
+      <button class="qb" data-spec="Mental Health Counselor"  onclick="qp(this)">💬 Mental Health</button>
+      <button class="qb" data-spec="Clinical Social Worker"   onclick="qp(this)">🤝 LCSW</button>
+      <button class="qb" data-spec="Dentist"                  onclick="qp(this)">🦷 Dental</button>
+      <button class="qb" data-spec="Chiropractor"             onclick="qp(this)">🦴 Chiro</button>
+      <button class="qb" data-spec="Urgent Care"              onclick="qp(this)">🚑 Urgent Care</button>
+      <button class="qb" data-spec="Pediatrics"               onclick="qp(this)">👶 Pediatrics</button>
+      <button class="qb" data-spec="Obstetrics Gynecology"    onclick="qp(this)">🌸 OB/GYN</button>
+      <button class="qb" data-spec="Dermatologist"            onclick="qp(this)">🔬 Derm</button>
+      <button class="qb" data-spec="Cardiologist"             onclick="qp(this)">❤️ Cardio</button>
+      <button class="qb" data-spec="Nurse Practitioner"       onclick="qp(this)">🩺 NP</button>
+      <button class="qb" data-spec="Physical Therapist"       onclick="qp(this)">🦵 PT</button>
+      <button class="qb" data-spec="Psychologist"             onclick="qp(this)">🧩 Psych</button>
+      <button class="qb" data-spec="Radiologist"              onclick="qp(this)">☢️ Radiology</button>
+      <button class="qb" data-spec="Addiction Medicine"       onclick="qp(this)">💊 Addiction</button>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="prog" id="prog">
+    <div class="pt">
+      <span class="pl" id="pL">Starting…</span>
+      <button class="pc" onclick="cancelFetch()">✕ Cancel</button>
+    </div>
+    <div class="pb"><div class="pf" id="pF"></div></div>
+    <div class="ps">
+      <div class="pst">Collected: <b id="pFt">0</b></div>
+      <div class="pst">Target: <b id="pTg">0</b></div>
+      <div class="pst">Term: <b id="pTerm">—</b></div>
+      <div class="pst">Pass: <b id="pPass">—</b></div>
+      <div class="pst">Unique NPIs: <b id="pUniq">0</b></div>
+    </div>
+  </div>
+
+  <!-- SEL BAR -->
+  <div class="selbar" id="selbar">
+    <div class="sbl" id="sbT">0 selected</div>
+    <div class="sbr">
+      <button class="btn b-gr b-sm" onclick="exp('sel')">⚡ Export Selected → Instantly</button>
+      <button class="btn b-gh b-sm" onclick="exp('all')">↓ Export All</button>
+      <button class="btn b-gh b-sm" onclick="desel()">✕ Deselect</button>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="tlbar" id="tlbar">
+    <div class="tll">
+      <div class="sw"><span class="swi">🔍</span><input type="text" id="fi" placeholder="Filter name, city, NPI, phone…" oninput="flt()"></div>
+      <span class="rc" id="rc"></span>
+    </div>
+    <div class="tlr">
+      <button class="btn b-gh b-sm" onclick="selAll()">☑ Select All</button>
+      <button class="btn b-gr b-sm" onclick="exp('all')">⚡ Instantly CSV</button>
+    </div>
+  </div>
+
+  <div class="tblw">
+    <table>
+      <thead id="th" style="display:none">
+        <tr>
+          <th><input type="checkbox" id="ca" onchange="tgAll(this.checked)"></th>
+          <th>#</th><th>Provider</th><th>Specialty</th><th>Address</th><th>Phone</th><th>Email</th><th>LinkedIn</th>
+        </tr>
+      </thead>
+      <tbody id="tb">
+        <tr><td colspan="8"><div class="empty">
+          <div class="ei">🏛️</div>
+          <div class="et">Ready to pull real NPI data</div>
+          <div class="es2">Set filters above and click ⚡ Pull Leads. The A–Z sweep strategy will automatically maximize your results by running multiple searches and deduplicating.</div>
+        </div></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="pag" id="pag"></div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     DOWNLOAD HISTORY
+══════════════════════════════════════════ -->
+<div class="pane" id="pane-hist">
+<div class="wrap" style="padding-top:20px;">
+
+  <div class="hist-stats" id="histStats">
+    <div class="hstat"><div class="hstat-n" id="hsTotalPulls">0</div><div class="hstat-l">Total Pulls</div></div>
+    <div class="hstat"><div class="hstat-n" id="hsTotalLeads">0</div><div class="hstat-l">Total Leads</div></div>
+    <div class="hstat"><div class="hstat-n" id="hsSpecialties">0</div><div class="hstat-l">Specialties Done</div></div>
+    <div class="hstat"><div class="hstat-n" id="hsStates">0</div><div class="hstat-l">States Covered</div></div>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+    <div style="font-family:'Syne',sans-serif;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mu);">Download History</div>
+    <button class="btn b-rd b-sm" onclick="clearHistory()">🗑 Clear All History</button>
+  </div>
+
+  <div id="histList">
+    <div class="hist-empty"><div class="hist-ei">📋</div>No downloads yet. Pull some leads and they'll appear here.</div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MAPS CLEANER
+══════════════════════════════════════════ -->
+<div class="pane" id="pane-maps">
+<div class="wrap" style="padding-top:20px;">
+  <div style="background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.18);border-radius:11px;padding:11px 14px;display:flex;gap:9px;align-items:center;margin-bottom:14px;">
+    <span style="font-size:.9rem">🗺️</span>
+    <div><b style="font-size:.74rem;color:var(--bl);">Google Maps → Instantly.ai</b><br><span style="font-size:.68rem;color:rgba(232,237,248,.38);">Copy any Maps listing text, paste here — extracts name, address, phone, website and builds email patterns from the real domain.</span></div>
+  </div>
+  <div class="mlay">
+    <div>
+      <div class="minstr">
+        <div class="mit">📋 How to use</div>
+        <div class="msr"><div class="msn">1</div><div class="mst">Search Maps: <code>family medicine Houston TX</code></div></div>
+        <div class="msr"><div class="msn">2</div><div class="mst"><strong>Select all text</strong> from the left panel and copy it</div></div>
+        <div class="msr"><div class="msn">3</div><div class="mst">Paste multiple listings separated by blank line or <code>---</code></div></div>
+        <div class="msr"><div class="msn">4</div><div class="mst">Click <strong>🧹 Clean &amp; Extract</strong> → <strong>⚡ Instantly CSV</strong></div></div>
+      </div>
+      <div class="card" style="margin-top:12px;">
+        <div class="ct">Paste Google Maps Text</div>
+        <textarea class="ta" id="mIn" placeholder="Paste Google Maps text here...
+
+Example:
+Johnson Family Medicine
+4.5 ★ (128 reviews) · Family practice physician
+1234 Oak Ave, Houston, TX 77001
+(713) 555-0134
+johnsonfamilymedicine.com
+---
+Serenity Mental Health
+4.8 ★ · Mental health service
+500 Medical Dr, Austin, TX 78701
+(512) 555-0199
+serenitymh.com" oninput="uCC()"></textarea>
+        <div class="ctb">
+          <span class="ccnt" id="ccnt">0 characters</span>
+          <button class="btn b-gh b-sm" onclick="clrM()">✕ Clear</button>
+          <button class="btn b-gh b-sm" onclick="pClip()">📋 Paste</button>
+          <button class="btn b-gen" onclick="cleanM()">🧹 Clean &amp; Extract</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="clcard">
+        <div class="clh">
+          <span class="clt" id="mTitle">Extracted Leads</span>
+          <div class="cla">
+            <button class="btn b-gh b-xs" onclick="saM()">☑ All</button>
+            <button class="btn b-gr b-xs" onclick="expM()">⚡ CSV</button>
+          </div>
+        </div>
+        <div id="mBody"><div class="mempty">Paste Maps text and click Clean &amp; Extract</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════════
+let uid = 1;
+const slug = s => (s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+
+function genEmails(first, last, org) {
+  const f = slug(first) || 'dr';
+  const l = slug(last);
+  const d = (slug((org||'').split(' ').slice(0,3).join('')) || f+l || 'practice') + '.com';
+  if (!l) return [`info@${d}`,`contact@${d}`,`office@${d}`,`admin@${d}`];
+  return [`${f}.${l}@${d}`,`dr.${l}@${d}`,`${f[0]||'d'}${l}@${d}`,`info@${d}`];
+}
+function genEmailsDomain(first, last, domain) {
+  const f = slug(first)||'dr', l = slug(last);
+  const d = domain.replace(/^https?:\/\//,'').replace(/^www\./,'').split('/')[0].toLowerCase();
+  if (!l) return [`info@${d}`,`contact@${d}`,`office@${d}`,`admin@${d}`];
+  return [`${f}.${l}@${d}`,`dr.${l}@${d}`,`${f[0]||'d'}${l}@${d}`,`info@${d}`];
+}
+function genLI(a, b, c) {
+  return `https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(`${a} ${b} ${c}`)}`;
+}
+function specTag(d) {
+  if (!d) return 'so'; const t = d.toLowerCase();
+  if (t.match(/family|internal|general|pediatric|ob\b|obstet|cardio|dermato|oncol|neuro|gastro|endocrin|urolog|pulmo|rheuma|nephro|allerg|podiat|geriat|pain|sports|radiol|anesth|emergency|plastic|wound/)) return 'sf';
+  if (t.match(/psych|mental|counsel|social work|behav|marriage|addict|behavioral/)) return 'sm';
+  if (t.match(/dent|oral/)) return 'sd';
+  if (t.match(/chiro/)) return 'sc';
+  if (t.match(/nurse|physician assist|physical therap|optom|occup|speech|acupun|naturo/)) return 'sn';
+  if (t.match(/urgent/)) return 'su';
+  return 'so';
+}
+function fmtPhone(r) {
+  const d = (r||'').replace(/\D/g,'');
+  if (d.length===10) return `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}`;
+  if (d.length===11&&d[0]==='1') return `(${d.slice(1,4)}) ${d.slice(4,7)}-${d.slice(7)}`;
+  return r||'';
+}
+function dlCSV(rows, fn) {
+  const csv = rows.map(r=>r.map(v=>{const s=String(v??'');return(s.includes(',')||s.includes('"'))?`"${s.replace(/"/g,'""')}"`:s;}).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download = fn; a.click();
+}
+function now() { return new Date().toLocaleString(); }
+
+// ══════════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════════
+function swTab(id, btn) {
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('pane-'+id).classList.add('on');
+  btn.classList.add('on');
+  if (id==='hist') renderHistory();
+}
+
+// ══════════════════════════════════════════════════
+// DOWNLOAD HISTORY (localStorage)
+// ══════════════════════════════════════════════════
+function getHistory() {
+  try { return JSON.parse(localStorage.getItem('mlp_history')||'[]'); } catch(e) { return []; }
+}
+function saveHistory(h) {
+  try { localStorage.setItem('mlp_history', JSON.stringify(h)); } catch(e) {}
+}
+function addHistory(entry) {
+  const h = getHistory();
+  h.unshift(entry); // newest first
+  saveHistory(h);
+  renderHistory();
+  updateHistBadge();
+  markDoneButtons();
+}
+function clearHistory() {
+  if (!confirm('Clear all download history?')) return;
+  localStorage.removeItem('mlp_history');
+  renderHistory(); updateHistBadge(); markDoneButtons();
+  toast('History cleared');
+}
+function deleteHistEntry(id) {
+  const h = getHistory().filter(e=>e.id!==id);
+  saveHistory(h); renderHistory(); updateHistBadge(); markDoneButtons();
+}
+
+function updateHistBadge() {
+  const h = getHistory();
+  const badge = document.getElementById('histBadge');
+  const tab   = document.getElementById('histTab');
+  if (h.length > 0) {
+    badge.textContent = h.length;
+    badge.style.display = 'inline';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function markDoneButtons() {
+  const h = getHistory();
+  const doneSpecs = new Set(h.map(e=>e.spec));
+  document.querySelectorAll('.qb').forEach(btn => {
+    const spec = btn.dataset.spec;
+    if (doneSpecs.has(spec)) btn.classList.add('done');
+    else btn.classList.remove('done');
+  });
+}
+
+function renderHistory() {
+  const h = getHistory();
+  const list = document.getElementById('histList');
+
+  // Update stats
+  const totalLeads = h.reduce((s,e)=>s+e.count,0);
+  const specs  = new Set(h.map(e=>e.spec)).size;
+  const states = new Set(h.map(e=>e.state||'All').filter(Boolean)).size;
+  document.getElementById('hsTotalPulls').textContent = h.length;
+  document.getElementById('hsTotalLeads').textContent = totalLeads.toLocaleString();
+  document.getElementById('hsSpecialties').textContent = specs;
+  document.getElementById('hsStates').textContent = states;
+
+  if (!h.length) {
+    list.innerHTML = '<div class="hist-empty"><div class="hist-ei">📋</div>No downloads yet. Pull some leads and they\'ll appear here.</div>';
+    return;
+  }
+
+  const specIcons = {'Family Medicine':'👨‍⚕️','Psychiatry':'🧠','Mental Health Counselor':'💬','Clinical Social Worker':'🤝','Dentist':'🦷','Chiropractor':'🦴','Urgent Care':'🚑','Pediatrics':'👶','Obstetrics Gynecology':'🌸','Dermatologist':'🔬','Cardiologist':'❤️','Nurse Practitioner':'🩺','Physical Therapist':'🦵','Psychologist':'🧩','Radiologist':'☢️','Addiction Medicine':'💊'};
+
+  list.innerHTML = '<div class="hist-grid">'+h.map(e=>`
+    <div class="hcard">
+      <div class="hcard-icon">${specIcons[e.spec]||'🏥'}</div>
+      <div class="hcard-info">
+        <div class="hcard-title">${e.spec}</div>
+        <div class="hcard-meta">
+          <span>Leads: <b>${e.count.toLocaleString()}</b></span>
+          <span>Source: <b>${e.src}</b></span>
+          <span>Mode: <b>${e.sweep==='az'?'A–Z Sweep':'Single'}</b></span>
+          ${e.state?`<span>State: <b>${e.state}</b></span>`:'<span>State: <b>All</b></span>'}
+          ${e.city?`<span>City: <b>${e.city}</b></span>`:''}
+        </div>
+      </div>
+      <div class="hcard-badges">
+        <span class="hbadge hb-spec">${e.spec}</span>
+        ${e.state?`<span class="hbadge hb-state">${e.state}</span>`:'<span class="hbadge hb-state">All States</span>'}
+        <span class="hbadge hb-count">${e.count.toLocaleString()} leads</span>
+        <span class="hbadge hb-src">${e.src}</span>
+      </div>
+      <div class="hcard-right">
+        <div class="hcard-date">${e.date}<br><span style="color:var(--gn);font-size:.65rem;">✓ Downloaded</span></div>
+        <button class="btn b-rd b-xs" onclick="deleteHistEntry('${e.id}')">✕</button>
+      </div>
+    </div>`).join('')+'</div>';
+}
+
+function warnIfDone(spec, state) {
+  const h = getHistory();
+  const match = h.filter(e=>e.spec===spec && (e.state||'')===(state||''));
+  if (!match.length) { hideWarn(); return false; }
+  const last = match[0];
+  showWarn(`⚠️ You already downloaded <b>${last.count.toLocaleString()} ${spec}${state?' in '+state:''}</b> leads on ${last.date}. You can still pull again — but expect many duplicate providers. Consider trying a different state or specialty.`);
+  return true;
+}
+function showWarn(m) { const b=document.getElementById('warnbanner'); b.innerHTML=m; b.style.display='block'; }
+function hideWarn() { document.getElementById('warnbanner').style.display='none'; }
+
+// ══════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════
+let leads=[], filt=[], sel=new Set(), pg=1;
+const PG = 100;
+let cancelled = false, running = false;
+
+// ══════════════════════════════════════════════════
+// FETCH ONE PAGE
+// ══════════════════════════════════════════════════
+async function fetchPage(endpoint, term, offset) {
+  const base = `https://clinicaltables.nlm.nih.gov/api/${endpoint}/v3/search`;
+  const params = new URLSearchParams({terms: term, maxList: 500, offset: offset});
+  const url = base + '?' + params.toString() +
+    '&ef=NPI,name.full,provider_type,addr_practice.line1,addr_practice.city,addr_practice.state,addr_practice.zip,addr_practice.phone';
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`${endpoint} HTTP ${r.status}`);
+  return r.json();
+}
+
+// Parse one page of results
+function parsePage(data, endpoint, eIdx) {
+  const ef     = data[2]||{};
+  const disp   = data[3]||[];
+  const npis   = ef['NPI']||[];
+  const names  = ef['name.full']||[];
+  const types  = ef['provider_type']||[];
+  const line1  = ef['addr_practice.line1']||[];
+  const cities = ef['addr_practice.city']||[];
+  const states = ef['addr_practice.state']||[];
+  const zips   = ef['addr_practice.zip']||[];
+  const phones = ef['addr_practice.phone']||[];
+  const idx    = parseInt(eIdx)||0;
+
+  return disp.map((d,i) => {
+    const full  = (names[i]||d||'').trim();
+    const clean = full.replace(/^DR\.?\s*/i,'');
+    const parts = clean.split(/\s+/);
+    const first = endpoint==='npi_idv' ? (parts[0]||'') : '';
+    const last  = endpoint==='npi_idv' ? parts.slice(1).join(' ') : '';
+    const org   = full||'Healthcare Provider';
+    const ptype = types[i]||'Healthcare Provider';
+    const phone = fmtPhone(phones[i]||'');
+    const emails= genEmails(first||org, last, org);
+    return {
+      id:uid++, npi:npis[i]||'', src:endpoint,
+      first, last, org,
+      spec: ptype.length>42?ptype.substring(0,40)+'…':ptype,
+      specTag: specTag(ptype), phone,
+      addr1: line1[i]||'', city: cities[i]||'',
+      state: states[i]||'', zip: (zips[i]||'').substring(0,5),
+      emails, selEmail: emails[idx]||emails[0],
+      li: genLI(first||org, last, ptype),
+    };
+  }).filter(p=>p.npi||p.first||p.org);
+}
+
+// Drain one endpoint+term combo up to 7500
+async function drainTerm(endpoint, term, target, seenNPIs, stateFilter, zipFilter, phoneOnly, eIdx, passLabel) {
+  const results = [];
+  let offset = 0;
+  while (results.length < target && offset < 7500 && !cancelled) {
+    document.getElementById('pTerm').textContent = `"${term}"`;
+    document.getElementById('pPass').textContent = passLabel;
+    const data = await fetchPage(endpoint, term, offset);
+    const total = data[0]||0;
+    if (!total || !data[3]||!data[3].length) break;
+    let batch = parsePage(data, endpoint, eIdx);
+    // Filters
+    if (stateFilter) batch = batch.filter(p=>p.state.toUpperCase()===stateFilter.toUpperCase());
+    if (zipFilter)   batch = batch.filter(p=>p.zip&&p.zip.startsWith(zipFilter));
+    if (phoneOnly)   batch = batch.filter(p=>p.phone);
+    // Dedup
+    batch = batch.filter(p=>{
+      if (!p.npi) return true;
+      if (seenNPIs.has(p.npi)) return false;
+      seenNPIs.add(p.npi); return true;
+    });
+    results.push(...batch);
+    offset += 500;
+    if (offset >= Math.min(total, 7500)) break;
+    await new Promise(r=>setTimeout(r,60));
+  }
+  return results;
+}
+
+// ══════════════════════════════════════════════════
+// MAIN GO
+// ══════════════════════════════════════════════════
+async function go() {
+  if (running) return;
+  const spec      = document.getElementById('fSpec').value;
+  const state     = document.getElementById('fState').value;
+  const city      = document.getElementById('fCity').value.trim();
+  const src       = document.getElementById('fSrc').value;
+  const target    = Math.min(Math.max(parseInt(document.getElementById('fCnt').value)||2000,1),50000);
+  const eIdx      = document.getElementById('fEP').value;
+  const dedup     = document.getElementById('fDd').value==='yes';
+  const phoneOnly = document.getElementById('fPh').value==='yes';
+  const sortBy    = document.getElementById('fSort').value;
+  const append    = document.getElementById('fApp').value==='yes';
+  const sweep     = document.getElementById('fSweep').value;
+  const zipFilter = document.getElementById('fZip').value.trim();
+
+  warnIfDone(spec, state);
+
+  cancelled = false; running = true;
+  hideErr();
+  document.getElementById('prog').style.display = 'block';
+  document.getElementById('pTg').textContent = target.toLocaleString();
+  document.getElementById('pFt').textContent = '0';
+  document.getElementById('pUniq').textContent = '0';
+  document.getElementById('pF').style.width = '0%';
+  document.getElementById('genBtn').disabled = true;
+  document.getElementById('genBtn').innerHTML = '⏳ Fetching…';
+
+  // Build base term
+  const baseTerm = city ? `${spec} ${city}` : spec;
+
+  // Decide which endpoints to use
+  const endpoints = src==='both' ? ['npi_idv','npi_org'] : src==='org' ? ['npi_org'] : ['npi_idv'];
+
+  // Build list of search terms
+  // In A-Z mode: "Specialty A", "Specialty B" … "Specialty Z"
+  // This breaks past the 7500 cap per term
+  const LETTERS = sweep==='az'
+    ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+    : [''];  // single mode: just use the base term as-is
+
+  const seenNPIs = dedup ? new Set(leads.map(l=>l.npi).filter(Boolean)) : new Set();
+  const newLeads = [];
+
+  try {
+    outer:
+    for (const ep of endpoints) {
+      for (const letter of LETTERS) {
+        if (cancelled) break outer;
+        if (newLeads.length >= target) break outer;
+
+        const term     = letter ? `${baseTerm} ${letter}` : baseTerm;
+        const passLabel= `${ep==='npi_idv'?'IDV':'ORG'}${letter?' ['+letter+']':''}`;
+        const need     = target - newLeads.length;
+
+        document.getElementById('pL').textContent =
+          `Sweeping ${passLabel} — ${newLeads.length.toLocaleString()} / ${target.toLocaleString()} collected`;
+
+        const batch = await drainTerm(ep, term, need, seenNPIs, state, zipFilter, phoneOnly, eIdx, passLabel);
+        newLeads.push(...batch);
+
+        // Update progress
+        const pct = Math.min((newLeads.length/target)*100, 99).toFixed(1);
+        document.getElementById('pF').style.width = pct+'%';
+        document.getElementById('pFt').textContent = newLeads.length.toLocaleString();
+        document.getElementById('pUniq').textContent = seenNPIs.size.toLocaleString();
+
+        if (!cancelled && newLeads.length < target) {
+          await new Promise(r=>setTimeout(r,80));
+        }
+      }
+    }
+  } catch(e) {
+    console.error(e);
+    showErr(`Error: ${e.message}`);
+  }
+
+  running = false;
+  document.getElementById('prog').style.display = 'none';
+  document.getElementById('genBtn').disabled = false;
+  document.getElementById('genBtn').innerHTML = '⚡ Pull Leads';
+  document.getElementById('pF').style.width = '100%';
+
+  if (!newLeads.length) {
+    showErr(`No results found for "${spec}"${state?' in '+state:''}. Try All States, or a different specialty.`);
+    if (!leads.length) showEmptyTbl();
+    return;
+  }
+
+  // Sort
+  if (sortBy==='name') newLeads.sort((a,b)=>(a.last+a.first).localeCompare(b.last+b.first));
+  else if (sortBy==='state') newLeads.sort((a,b)=>a.state.localeCompare(b.state));
+  else if (sortBy==='city') newLeads.sort((a,b)=>a.city.localeCompare(b.city));
+
+  leads = append ? [...leads,...newLeads] : newLeads;
+  if (!append) sel.clear();
+  filt=[...leads]; pg=1;
+  document.getElementById('fi').value='';
+  showUI(); render(); updStats();
+
+  // Save to history
+  addHistory({
+    id: Date.now()+'',
+    spec, state, city,
+    src: endpoints.join('+'),
+    sweep,
+    count: newLeads.length,
+    date: now()
+  });
+
+  toast(cancelled
+    ? `⚡ Cancelled — ${newLeads.length.toLocaleString()} leads saved`
+    : `✅ ${newLeads.length.toLocaleString()} unique providers pulled!`);
+}
+
+function cancelFetch() { cancelled=true; document.getElementById('pL').textContent='Cancelling…'; }
+
+// ══════════════════════════════════════════════════
+// RENDER TABLE
+// ══════════════════════════════════════════════════
+function render() {
+  const tbody = document.getElementById('tb');
+  const start = (pg-1)*PG, slice = filt.slice(start,start+PG);
+  if (!slice.length) {
+    tbody.innerHTML=`<tr><td colspan="8"><div class="empty"><div class="ei">🔍</div><div class="et">No results</div><div class="es2">Adjust your filter.</div></div></td></tr>`;
+    renderPag(); return;
+  }
+  tbody.innerHTML = slice.map((p,i) => {
+    const chk  = sel.has(p.id)?'checked':'';
+    const opts = p.emails.map(e=>`<option value="${e}"${e===p.selEmail?' selected':''}>${e}</option>`).join('');
+    const name = [p.first,p.last].filter(Boolean).join(' ')||p.org;
+    const disp = p.first ? `Dr. ${name}` : name;
+    return `<tr style="animation-delay:${Math.min(i,40)*7}ms">
+      <td style="text-align:center"><input type="checkbox" ${chk} onchange="tgL(${p.id},this.checked)"></td>
+      <td style="color:var(--mu);font-size:.62rem">${start+i+1}</td>
+      <td>
+        <div class="pname">${disp}</div>
+        <div class="porg">${p.org}</div>
+        <div class="npi">NPI: ${p.npi}</div>
+      </td>
+      <td><span class="stag ${p.specTag}" title="${p.spec}">${p.spec}</span></td>
+      <td class="adr">${p.addr1?p.addr1+'<br>':''} ${[p.city,p.state,p.zip].filter(Boolean).join(', ')}</td>
+      <td class="phn">${p.phone||'—'}</td>
+      <td><select class="esel" onchange="setE(${p.id},this.value)">${opts}</select></td>
+      <td><a class="lia" href="${p.li}" target="_blank" rel="noopener">
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452z"/></svg>LI
+      </a></td>
+    </tr>`;
+  }).join('');
+  renderPag();
+  document.getElementById('rc').textContent=`${filt.length.toLocaleString()} providers`;
+  document.getElementById('ca').checked=slice.length>0&&slice.every(p=>sel.has(p.id));
+}
+
+function renderPag() {
+  const total=Math.ceil(filt.length/PG), pag=document.getElementById('pag');
+  if (total<=1){pag.innerHTML='';return;}
+  let h=`<button class="pgb" onclick="goP(${pg-1})" ${pg===1?'disabled':''}>← Prev</button>`;
+  for(let i=1;i<=total;i++){
+    if(total>8&&i>2&&i<total-1&&Math.abs(i-pg)>2){if(i===3||i===total-2)h+=`<span style="color:var(--mu);padding:0 3px">…</span>`;continue;}
+    h+=`<button class="pgb ${i===pg?'on':''}" onclick="goP(${i})">${i}</button>`;
+  }
+  h+=`<button class="pgb" onclick="goP(${pg+1})" ${pg===total?'disabled':''}>Next →</button>`;
+  pag.innerHTML=h;
+}
+function goP(p){const t=Math.ceil(filt.length/PG);if(p<1||p>t)return;pg=p;render();window.scrollTo({top:0,behavior:'smooth'});}
+
+// ══════════════════════════════════════════════════
+// FILTER / SELECTION / EXPORT
+// ══════════════════════════════════════════════════
+function flt(){
+  const q=document.getElementById('fi').value.toLowerCase();
+  filt=q?leads.filter(p=>[p.first,p.last,p.org,p.spec,p.city,p.state,p.npi,p.phone].join(' ').toLowerCase().includes(q)):[...leads];
+  pg=1; render();
+}
+function qp(btn){
+  document.getElementById('fSpec').value=btn.dataset.spec;
+  document.querySelectorAll('.qb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  warnIfDone(btn.dataset.spec, document.getElementById('fState').value);
+}
+function tgL(id,c){c?sel.add(id):sel.delete(id);updStats();}
+function tgAll(c){filt.slice((pg-1)*PG,(pg-1)*PG+PG).forEach(p=>c?sel.add(p.id):sel.delete(p.id));updStats();render();}
+function selAll(){leads.forEach(p=>sel.add(p.id));updStats();render();toast(`☑ Selected all ${leads.length.toLocaleString()}`);}
+function desel(){sel.clear();updStats();render();}
+function setE(id,v){const p=leads.find(p=>p.id===id);if(p)p.selEmail=v;}
+
+function updStats(){
+  const s=sel.size;
+  document.getElementById('hpT').textContent=leads.length.toLocaleString()+' Leads';
+  document.getElementById('hpS').textContent=s.toLocaleString()+' Selected';
+  document.getElementById('selbar').style.display=s>0?'flex':'none';
+  document.getElementById('sbT').textContent=`${s.toLocaleString()} lead${s!==1?'s':''} selected`;
+}
+
+function exp(mode){
+  const data=mode==='sel'?leads.filter(p=>sel.has(p.id)):[...leads];
+  if(!data.length){toast('No leads to export','w');return;}
+  const hdrs=['first_name','last_name','email','company_name','phone','website','city','state','country','linkedin','npi','specialty'];
+  const rows=data.map(p=>{
+    const dom=(p.selEmail||'').split('@')[1]||'';
+    // For orgs with no first/last, split org name
+    let first=p.first, last=p.last;
+    if(!first&&!last&&p.org){
+      const pts=p.org.replace(/[,.]+$/,'').trim().split(/\s+/);
+      first=pts.length===1?pts[0]:pts.slice(0,-1).join(' ');
+      last=pts.length>1?pts[pts.length-1]:'';
+    }
+    return[first,last,p.selEmail,p.org,p.phone,dom?`https://www.${dom}`:'',p.city,p.state,'US',p.li,p.npi,p.spec];
+  });
+  dlCSV([hdrs,...rows],`instantly_${mode}_${data.length}.csv`);
+  toast(`⚡ Exported ${data.length.toLocaleString()} leads → Instantly.ai`);
+}
+
+function showUI(){document.getElementById('th').style.display='';document.getElementById('tlbar').style.display='flex';hideErr();}
+function showEmptyTbl(){
+  document.getElementById('th').style.display='none';
+  document.getElementById('tlbar').style.display='none';
+  document.getElementById('tb').innerHTML=`<tr><td colspan="8"><div class="empty"><div class="ei">🏛️</div><div class="et">Ready</div><div class="es2">Set filters and click ⚡ Pull Leads.</div></div></td></tr>`;
+}
+function showErr(m){const e=document.getElementById('errbox');e.innerHTML='⚠ '+m;e.style.display='block';}
+function hideErr(){document.getElementById('errbox').style.display='none';}
+function clearAll(){
+  leads=[];filt=[];sel.clear();pg=1;
+  ['th','tlbar','selbar'].forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById('pag').innerHTML='';
+  document.getElementById('fi').value='';
+  document.getElementById('prog').style.display='none';
+  hideErr();hideWarn();showEmptyTbl();
+  document.getElementById('hpT').textContent='0 Leads';
+  document.getElementById('hpS').textContent='0 Selected';
+}
+
+// ══════════════════════════════════════════════════
+// MAPS CLEANER
+// ══════════════════════════════════════════════════
+let mLeads=[], mSel=new Set();
+function uCC(){document.getElementById('ccnt').textContent=document.getElementById('mIn').value.length.toLocaleString()+' chars';}
+async function pClip(){try{document.getElementById('mIn').value=await navigator.clipboard.readText();uCC();toast('📋 Pasted');}catch(e){toast('Use Ctrl+V to paste','w');}}
+function clrM(){document.getElementById('mIn').value='';uCC();mLeads=[];mSel.clear();document.getElementById('mTitle').textContent='Extracted Leads';document.getElementById('mBody').innerHTML='<div class="mempty">Paste Maps text and click Clean &amp; Extract</div>';}
+function cleanM(){
+  const raw=document.getElementById('mIn').value.trim();
+  if(!raw){toast('Paste some Maps text first','w');return;}
+  const blocks=raw.split(/\n{2,}|^-{3,}$/m).map(b=>b.trim()).filter(b=>b.length>8);
+  const ex=blocks.map(parseBlock).filter(Boolean);
+  if(!ex.length){toast('Could not extract. Copy more text from the listing.','w');return;}
+  mLeads=ex;mSel=new Set(mLeads.map(l=>l.id));
+  renderM();toast(`🧹 Extracted ${ex.length} leads`);
+}
+function parseBlock(block){
+  const lines=block.split('\n').map(l=>l.trim()).filter(Boolean);
+  if(!lines.length)return null;
+  let name='',org='',phone='',website='',address='',city='',state='',zip='';
+  for(let i=0;i<lines.length;i++){
+    const l=lines[i];
+    if(/^\d\.\d[\s★⭐]/.test(l)||/^\(\d+\s*reviews?\)/.test(l))continue;
+    if(/^(open|closed|hours|mon|tue|wed|thu|fri|sat|sun)/i.test(l))continue;
+    if(/^(appointment|directions|menu|call|website|save|share|overview|reviews|photos|about)/i.test(l))continue;
+    if(!phone&&/\(?\d{3}\)?[\s.\-]\d{3}[\s.\-]\d{4}/.test(l)){phone=fmtPhone(l.match(/\(?\d{3}\)?[\s.\-]\d{3}[\s.\-]\d{4}/)[0]);continue;}
+    if(!website&&/\.(com|org|net|health|care|dental|clinic|md|io)\b/i.test(l)&&l.split(' ').length<=3){const w=l.split(' ')[0];if(w.length<80){website=w.replace(/^https?:\/\//,'').replace(/^www\./,'').split('/')[0];continue;}}
+    if(!address&&/^\d+\s+\w/.test(l)&&/(st|ave|blvd|dr|rd|way|pkwy|ln|ct|pl|suite|ste)\b/i.test(l)){
+      address=l;
+      const nx=lines[i+1]||'';const csz=nx.match(/^([A-Za-z ]+),\s*([A-Z]{2})\s+(\d{5})/);
+      if(csz){city=csz[1].trim();state=csz[2];zip=csz[3];i++;}
+      else{const inl=l.match(/,\s*([A-Za-z ]+),\s*([A-Z]{2})\s*(\d{5})?/);if(inl){city=inl[1].trim();state=inl[2];zip=inl[3]||'';}}
+      continue;
+    }
+    if(!city&&/^[A-Za-z ]+,\s*[A-Z]{2}\s*\d*$/.test(l)){const m=l.match(/^([A-Za-z ]+),\s*([A-Z]{2})\s*(\d+)?/);if(m){city=m[1].trim();state=m[2];zip=m[3]||'';}continue;}
+    if(!name&&l.length>2&&l.length<80&&!/^\d/.test(l)){name=l;continue;}
+    if(!org&&l.length>2&&l.length<80&&!/^\d/.test(l)&&l!==name){org=l;continue;}
+  }
+  if(!name&&!org)return null;
+  const orgF=org||name;
+  const first=(name||'').replace(/^Dr\.?\s*/i,'').split(' ')[0]||'Provider';
+  const last=(name||'').replace(/^Dr\.?\s*/i,'').split(' ').slice(1).join(' ')||'';
+  const emails=website?genEmailsDomain(first,last,website):genEmails(first,last,orgF);
+  return{id:uid++,rawName:name,first,last,org:orgF,phone,address,city,state,zip,website:website?`https://www.${website}`:'',emails,selEmail:emails[0],li:genLI(first,last,'healthcare')};
+}
+function renderM(){
+  document.getElementById('mTitle').textContent=`${mLeads.length} Leads Extracted`;
+  const b=document.getElementById('mBody');
+  if(!mLeads.length){b.innerHTML='<div class="mempty">No leads extracted.</div>';return;}
+  b.innerHTML=mLeads.map((p,i)=>{
+    const chk=mSel.has(p.id)?'checked':'';
+    const opts=p.emails.map(e=>`<option value="${e}"${e===p.selEmail?' selected':''}>${e}</option>`).join('');
+    return`<div class="lcard" style="animation-delay:${Math.min(i,30)*11}ms">
+      <div style="padding-top:2px"><input type="checkbox" ${chk} onchange="tgM(${p.id},this.checked)"></div>
+      <div>
+        <div class="lcn">${p.rawName||p.org}</div>
+        ${p.org&&p.org!==p.rawName?`<div class="lco">${p.org}</div>`:''}
+        <div class="lcm">
+          ${p.address?`<span>📍 ${p.address}${p.city?', '+p.city:''} ${p.state} ${p.zip}</span>`:''}
+          ${p.phone?`<span>📞 ${p.phone}</span>`:''}
+          ${p.website?`<span>🌐 <a href="${p.website}" target="_blank">${p.website.replace('https://www.','')}</a></span>`:''}
+        </div>
+        <div style="margin-top:6px"><select style="background:var(--s2);border:1px solid var(--b2);border-radius:5px;color:#60a5fa;font-family:'Epilogue',sans-serif;font-size:.68rem;padding:3px 6px;outline:none;cursor:pointer;width:230px;" onchange="sEM(${p.id},this.value)">${opts}</select></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end">
+        <a class="lia" href="${p.li}" target="_blank" rel="noopener" style="font-size:.63rem">LI</a>
+        <button class="btn b-rd b-xs" onclick="rmM(${p.id})">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function tgM(id,c){c?mSel.add(id):mSel.delete(id);}
+function saM(){mLeads.forEach(l=>mSel.add(l.id));renderM();toast(`☑ All ${mLeads.length} selected`);}
+function sEM(id,v){const l=mLeads.find(l=>l.id===id);if(l)l.selEmail=v;}
+function rmM(id){mLeads=mLeads.filter(l=>l.id!==id);mSel.delete(id);renderM();}
+function expM(){
+  const data=mSel.size>0?mLeads.filter(l=>mSel.has(l.id)):mLeads;
+  if(!data.length){toast('No leads to export','w');return;}
+  const hdrs=['first_name','last_name','email','company_name','phone','website','city','state','country','linkedin'];
+  dlCSV([hdrs,...data.map(p=>[p.first,p.last,p.selEmail,p.org,p.phone,p.website,p.city,p.state,'US',p.li])],`maps_leads_${data.length}.csv`);
+  toast(`⚡ Exported ${data.length} Maps leads`);
+}
+
+// ══════════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════════
+let tT;
+function toast(msg,type=''){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className='toast on'+(type?' '+type:'');
+  clearTimeout(tT);tT=setTimeout(()=>el.classList.remove('on'),3400);
+}
+
+// ══════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════
+updateHistBadge();
+markDoneButtons();
+</script>
+</body>
+</html>
